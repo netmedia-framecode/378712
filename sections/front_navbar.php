@@ -14,7 +14,7 @@ if (isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
 
       <div class="flex-shrink-0 flex items-center">
         <a href="<?= $baseURL ?>" class="text-2xl font-bold text-primary flex items-center gap-2">
-          <i class="bi bi-buildings"></i> Sumber Logam
+          <i class="bi bi-buildings"></i> <?= $data_utilities['name_web'] ?>
         </a>
       </div>
 
