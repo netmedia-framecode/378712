@@ -11,7 +11,8 @@ $select_barang = "SELECT
     tabel_katalog.satuan,
     tabel_katalog.deskripsi_barang,
     tabel_katalog.harga_barang,
-    tabel_inventori.stok_tersedia
+    tabel_inventori.stok_tersedia,
+    tabel_katalog.gambar_barang
 FROM tabel_katalog
 LEFT JOIN tabel_inventori ON tabel_katalog.kode_katalog = tabel_inventori.kode_katalog
 ORDER BY tabel_katalog.nama_barang ASC";
@@ -59,6 +60,7 @@ $select_inventori = "SELECT
     tabel_katalog.nama_barang,
     tabel_katalog.satuan,
     tabel_inventori.stok_tersedia,
+    tabel_katalog.gambar_barang,
     tabel_inventori.terakhir_diupdate
 FROM tabel_inventori
 JOIN tabel_katalog ON tabel_inventori.kode_katalog = tabel_katalog.kode_katalog

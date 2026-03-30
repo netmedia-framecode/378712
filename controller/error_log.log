@@ -16,3 +16,4 @@
 [2026-03-14 17:20:40] Error [8192]: number_format(): Passing null to parameter #1 ($num) of type float is deprecated in /Applications/XAMPP/xamppfiles/htdocs/apps/website/tugas/si_penjualan_bahan_bangunan/views/index.php on line 137
 [2026-03-14 17:20:42] Error [8192]: number_format(): Passing null to parameter #1 ($num) of type float is deprecated in /Applications/XAMPP/xamppfiles/htdocs/apps/website/tugas/si_penjualan_bahan_bangunan/views/index.php on line 137
 [2026-03-14 17:20:43] Error [8192]: number_format(): Passing null to parameter #1 ($num) of type float is deprecated in /Applications/XAMPP/xamppfiles/htdocs/apps/website/tugas/si_penjualan_bahan_bangunan/views/index.php on line 137
+[2026-03-31 01:07:25] Error [2]: Undefined array key "tanggal_pesan" in /Applications/XAMPP/xamppfiles/htdocs/apps/website/tugas/si_penjualan_bahan_bangunan/views/laporan/penjualan.php on line 160

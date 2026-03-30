@@ -130,7 +130,8 @@ CREATE TABLE
     nama_barang VARCHAR(150) NOT NULL,
     deskripsi_barang TEXT,
     harga_barang DECIMAL(15, 2) NOT NULL,
-    satuan VARCHAR(50) NOT NULL 
+    satuan VARCHAR(50) NOT NULL,
+    gambar_barang VARCHAR(100) 
   );
 
 -- 3. tabel_inventori

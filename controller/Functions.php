@@ -259,9 +259,9 @@ if (!isset($_SESSION["project_si_penjualan_bahan_bangunan"]["users"])) {
                 </table>
             </body>
           </html>";
-          smtp_mail($to, $subject, $message, "", "", 0, 0, true);
+          // smtp_mail($to, $subject, $message, "", "", 0, 0, true);
           $_SESSION['data_auth'] = ['en_user' => $en_user];
-          $sql = "INSERT INTO users(en_user,token,name,email,password) VALUES('$en_user','$token','$data[name]','$data[email]','$password')";
+          $sql = "INSERT INTO users(id_active,en_user,token,name,email,password) VALUES('1','$en_user','$token','$data[name]','$data[email]','$password')";
         }
       }
     }
@@ -1189,6 +1189,9 @@ if (isset($_SESSION["project_si_penjualan_bahan_bangunan"]["users"])) {
 
   function barang($conn, $data, $action)
   {
+    // Tentukan folder tempat menyimpan gambar (Sesuaikan dengan struktur folder Anda)
+    $target_dir = "../../assets/img/katalog/";
+
     if ($action == "insert") {
       // Memeriksa apakah kode barang sudah pernah terdaftar
       $checkKode = "SELECT * FROM tabel_katalog WHERE kode_katalog = '$data[kode_katalog]'";
@@ -1198,15 +1201,31 @@ if (isset($_SESSION["project_si_penjualan_bahan_bangunan"]["users"])) {
         $message_type = "danger";
         alert($message, $message_type);
         return false;
-      } else {
-        // Penambahan kolom satuan di query INSERT
-        $sql = "INSERT INTO tabel_katalog (kode_katalog, nama_barang, satuan, deskripsi_barang, harga_barang) 
-              VALUES ('$data[kode_katalog]', '$data[nama_barang]', '$data[satuan]', '$data[deskripsi_barang]', '$data[harga_barang]')";
       }
+
+      // PROSES UPLOAD GAMBAR
+      $gambar_barang = "default.png"; // Nama gambar default jika user tidak upload gambar
+      if (isset($_FILES['gambar_barang']['name']) && $_FILES['gambar_barang']['name'] != '') {
+        $nama_file = $_FILES['gambar_barang']['name'];
+        $tmp_file = $_FILES['gambar_barang']['tmp_name'];
+        $ext = strtolower(pathinfo($nama_file, PATHINFO_EXTENSION));
+        $valid_ext = array('png', 'jpg', 'jpeg');
+
+        if (in_array($ext, $valid_ext)) {
+          $gambar_barang = uniqid() . "." . $ext; // Buat nama file unik agar tidak bentrok
+          move_uploaded_file($tmp_file, $target_dir . $gambar_barang);
+        } else {
+          alert("Gagal! Format gambar harus JPG, JPEG, atau PNG.", "danger");
+          return false;
+        }
+      }
+
+      $sql = "INSERT INTO tabel_katalog (kode_katalog, nama_barang, satuan, deskripsi_barang, harga_barang, gambar_barang) 
+            VALUES ('$data[kode_katalog]', '$data[nama_barang]', '$data[satuan]', '$data[deskripsi_barang]', '$data[harga_barang]', '$gambar_barang')";
     }
 
     if ($action == "update") {
-      // Memeriksa apakah user mengubah kode_katalog, dan apakah kode barunya bentrok dengan data lain
+      // Memeriksa apakah user mengubah kode_katalog, dan apakah kode barunya bentrok
       if ($data['kode_katalog'] !== $data['kode_katalogOld']) {
         $checkKode = "SELECT * FROM tabel_katalog WHERE kode_katalog = '$data[kode_katalog]'";
         $checkKode = mysqli_query($conn, $checkKode);
@@ -1218,17 +1237,61 @@ if (isset($_SESSION["project_si_penjualan_bahan_bangunan"]["users"])) {
         }
       }
 
-      // Penambahan update kolom satuan di query UPDATE
-      $sql = "UPDATE tabel_katalog 
-            SET kode_katalog='$data[kode_katalog]', 
-                nama_barang='$data[nama_barang]', 
-                satuan='$data[satuan]',
-                deskripsi_barang='$data[deskripsi_barang]', 
-                harga_barang='$data[harga_barang]' 
-            WHERE kode_katalog='$data[kode_katalogOld]'";
+      // PROSES UPLOAD GAMBAR BARU (JIKA ADA)
+      $gambar_baru = "";
+      if (isset($_FILES['gambar_barang']['name']) && $_FILES['gambar_barang']['name'] != '') {
+        $nama_file = $_FILES['gambar_barang']['name'];
+        $tmp_file = $_FILES['gambar_barang']['tmp_name'];
+        $ext = strtolower(pathinfo($nama_file, PATHINFO_EXTENSION));
+        $valid_ext = array('png', 'jpg', 'jpeg');
+
+        if (in_array($ext, $valid_ext)) {
+          $gambar_baru = uniqid() . "." . $ext;
+          move_uploaded_file($tmp_file, $target_dir . $gambar_baru);
+
+          // Hapus gambar lama dari server agar tidak memenuhi penyimpanan
+          $query_lama = mysqli_query($conn, "SELECT gambar_barang FROM tabel_katalog WHERE kode_katalog='$data[kode_katalogOld]'");
+          $data_lama = mysqli_fetch_assoc($query_lama);
+          if ($data_lama['gambar_barang'] != "" && $data_lama['gambar_barang'] != "default.png" && file_exists($target_dir . $data_lama['gambar_barang'])) {
+            unlink($target_dir . $data_lama['gambar_barang']);
+          }
+        } else {
+          alert("Gagal! Format gambar harus JPG, JPEG, atau PNG.", "danger");
+          return false;
+        }
+      }
+
+      // QUERY UPDATE (Pisahkan antara yang upload gambar baru dan yang tidak)
+      if ($gambar_baru != "") {
+        // Jika user mengubah gambar
+        $sql = "UPDATE tabel_katalog 
+                SET kode_katalog='$data[kode_katalog]', 
+                    nama_barang='$data[nama_barang]', 
+                    satuan='$data[satuan]',
+                    deskripsi_barang='$data[deskripsi_barang]', 
+                    harga_barang='$data[harga_barang]',
+                    gambar_barang='$gambar_baru'
+                WHERE kode_katalog='$data[kode_katalogOld]'";
+      } else {
+        // Jika user tidak mengubah gambar (gambar lama tetap dipakai)
+        $sql = "UPDATE tabel_katalog 
+                SET kode_katalog='$data[kode_katalog]', 
+                    nama_barang='$data[nama_barang]', 
+                    satuan='$data[satuan]',
+                    deskripsi_barang='$data[deskripsi_barang]', 
+                    harga_barang='$data[harga_barang]' 
+                WHERE kode_katalog='$data[kode_katalogOld]'";
+      }
     }
 
     if ($action == "delete") {
+      // Hapus file fisik gambar dari server sebelum data di database dihapus
+      $query_lama = mysqli_query($conn, "SELECT gambar_barang FROM tabel_katalog WHERE kode_katalog='$data[kode_katalog]'");
+      $data_lama = mysqli_fetch_assoc($query_lama);
+      if ($data_lama['gambar_barang'] != "" && $data_lama['gambar_barang'] != "default.png" && file_exists($target_dir . $data_lama['gambar_barang'])) {
+        unlink($target_dir . $data_lama['gambar_barang']);
+      }
+
       $sql = "DELETE FROM tabel_katalog WHERE kode_katalog='$data[kode_katalog]'";
     }
 

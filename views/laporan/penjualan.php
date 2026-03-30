@@ -157,7 +157,7 @@ if (mysqli_num_rows($views_laporan) > 0) {
                   <tr>
                     <td class="text-center"><?= $no++ ?></td>
                     <td>
-                      <span class="badge bg-light text-dark border"><?= date('d M Y', strtotime($data['tanggal_transaksi'])) ?></span>
+                      <span class="badge bg-light text-dark border"><?= date('d M Y h:i A', strtotime($data['tanggal_transaksi'])) ?></span>
                     </td>
                     <td class="fw-semibold text-primary">ORD-<?= str_pad($data['id_pesanan'], 4, '0', STR_PAD_LEFT) ?></td>
                     <td class="fw-semibold"><?= $data['nama_pembeli'] ?></td>

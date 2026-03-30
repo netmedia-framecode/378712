@@ -20,7 +20,7 @@ require_once("../../templates/views_top.php"); ?>
       <div class="col-lg-6">
         <div class="card stretch stretch-full">
           <div class="card-body">
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
 
               <div class="mb-3">
                 <label for="kode_katalog" class="form-label">Kode Barang <span class="text-danger">*</span></label>
@@ -43,9 +43,15 @@ require_once("../../templates/views_top.php"); ?>
                 <textarea class="form-control" id="deskripsi_barang" name="deskripsi_barang" rows="3" placeholder="Masukkan detail spesifikasi atau keterangan barang..."></textarea>
               </div>
 
-              <div class="mb-4">
+              <div class="mb-3">
                 <label for="harga_barang" class="form-label">Harga Barang (Rp) <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="harga_barang" name="harga_barang" min="0" placeholder="Contoh: 55000" required>
+              </div>
+
+              <div class="mb-4">
+                <label for="gambar_barang" class="form-label">Gambar Barang</label>
+                <input type="file" class="form-control" id="gambar_barang" name="gambar_barang" accept="image/png, image/jpeg, image/jpg">
+                <small class="text-muted">Format yang diizinkan: JPG, JPEG, PNG. Opsional (kosongkan jika tidak ada gambar).</small>
               </div>
 
               <div class="d-flex justify-content-start gap-2">

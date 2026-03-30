@@ -61,7 +61,23 @@ require_once("../../templates/views_top.php"); ?>
                       <td class="text-center">
                         <span class="badge bg-light text-dark border"><?= $data['kode_katalog'] ?></span>
                       </td>
-                      <td><?= $data['nama_barang'] ?></td>
+                      <td>
+                        <div class="d-flex align-items-center gap-3">
+                          <div class="flex-shrink-0">
+                            <?php
+                            $gambar = (!empty($data['gambar_barang'])) ? $data['gambar_barang'] : 'default.png';
+                            ?>
+                            <img src="../../assets/img/katalog/<?= htmlspecialchars($gambar) ?>"
+                              alt="Gambar Barang"
+                              class="rounded border"
+                              style="width: 45px; height: 45px; object-fit: cover;">
+                          </div>
+
+                          <div>
+                            <span class="d-block fw-bold text-dark"><?= htmlspecialchars($data['nama_barang']) ?></span>
+                          </div>
+                        </div>
+                      </td>
                       <td class="text-center"><?= $data['satuan'] ?></td>
                       <td class="text-center">
                         <?php

@@ -8,7 +8,8 @@ if (isset($_POST["register"])) {
     return valid($conn, $value);
   }, $_POST);
   if (register($conn, $validated_post, $action = 'insert') > 0) {
-    header("Location: verification?en=" . $_SESSION['data_auth']['en_user']);
+    // header("Location: verification?en=" . $_SESSION['data_auth']['en_user']);
+    header("Location: ./");
     exit();
   }
 }

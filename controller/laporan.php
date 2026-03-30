@@ -14,7 +14,7 @@ $query_laporan = "SELECT
                     users.name AS nama_pembeli,
                     COUNT(tabel_transaksi.id_transaksi) AS total_item,
                     SUM(tabel_transaksi.total_harga) AS grand_total,
-                    MAX(tabel_transaksi.tanggal_transaksi) AS tanggal_transaksi
+                    MAX(tabel_pesanan.tanggal_pesan) AS tanggal_transaksi
                   FROM tabel_pesanan
                   JOIN users ON tabel_pesanan.id_user = users.id_user
                   JOIN tabel_transaksi ON tabel_pesanan.id_pesanan = tabel_transaksi.id_pesanan

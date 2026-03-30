@@ -33,7 +33,7 @@ if (!isset($_GET["p"])) {
         <div class="col-lg-6">
           <div class="card stretch stretch-full">
             <div class="card-body">
-              <form action="" method="POST">
+              <form action="" method="POST" enctype="multipart/form-data">
 
                 <input type="hidden" name="kode_katalogOld" value="<?= htmlspecialchars($view_data['kode_katalog']) ?>">
                 <input type="hidden" name="nama_barangOld" value="<?= htmlspecialchars($view_data['nama_barang']) ?>">
@@ -59,9 +59,26 @@ if (!isset($_GET["p"])) {
                   <textarea class="form-control" id="deskripsi_barang" name="deskripsi_barang" rows="3"><?= htmlspecialchars($view_data['deskripsi_barang']) ?></textarea>
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
                   <label for="harga_barang" class="form-label">Harga Barang (Rp) <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" id="harga_barang" name="harga_barang" min="0" value="<?= htmlspecialchars($view_data['harga_barang']) ?>" required>
+                </div>
+
+                <div class="mb-4">
+                  <label for="gambar_barang" class="form-label">Gambar Barang Saat Ini</label>
+                  <div class="mb-2">
+                    <?php if (!empty($view_data['gambar_barang']) && $view_data['gambar_barang'] != 'default.png') { ?>
+                      <img src="../../assets/img/katalog/<?= htmlspecialchars($view_data['gambar_barang']) ?>" alt="Gambar Barang" class="img-thumbnail" style="max-height: 150px; object-fit: cover;">
+                    <?php } else { ?>
+                      <div class="alert alert-secondary py-2" role="alert">
+                         <i class="bi bi-image text-muted me-2"></i> Belum ada gambar (menggunakan default).
+                      </div>
+                    <?php } ?>
+                  </div>
+                  
+                  <label for="gambar_barang" class="form-label">Ubah Gambar Barang <small class="text-muted">(Opsional)</small></label>
+                  <input type="file" class="form-control" id="gambar_barang" name="gambar_barang" accept="image/png, image/jpeg, image/jpg">
+                  <small class="text-muted">Biarkan kosong jika tidak ingin mengubah gambar. Format: JPG, JPEG, PNG.</small>
                 </div>
 
                 <div class="d-flex justify-content-start gap-2">
