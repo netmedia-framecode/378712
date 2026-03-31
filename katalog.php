@@ -57,14 +57,21 @@ require_once("sections/front_navbar.php");
       <?php
       if (isset($result_katalog) && mysqli_num_rows($result_katalog) > 0) {
         while ($item = mysqli_fetch_assoc($result_katalog)) {
+          // Cek apakah kolom gambar_barang memiliki isi, jika tidak gunakan default.png
+          $gambar = (!empty($item['gambar_barang'])) ? $item['gambar_barang'] : 'default.png';
       ?>
           <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group flex flex-col">
+            
             <div class="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center text-gray-400">
-              <i class="bi bi-image text-5xl group-hover:scale-110 transition duration-500"></i>
-              <div class="absolute top-3 left-3 bg-white px-2 py-1 rounded text-xs font-bold text-gray-700 shadow-sm">
+              <img src="assets/img/katalog/<?= htmlspecialchars($gambar) ?>" 
+                   alt="<?= htmlspecialchars($item['nama_barang']) ?>" 
+                   class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+              
+              <div class="absolute top-3 left-3 bg-white px-2 py-1 rounded text-xs font-bold text-gray-700 shadow-sm z-10">
                 Stok: <?= $item['stok_tersedia'] ?>
               </div>
             </div>
+            
             <div class="p-5 flex-grow flex flex-col justify-between">
               <div>
                 <p class="text-xs text-gray-400 mb-1 uppercase tracking-wider"><?= $item['kode_katalog'] ?></p>
